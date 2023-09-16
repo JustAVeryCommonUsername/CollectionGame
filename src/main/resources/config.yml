@@ -32,7 +32,7 @@ recurrent:
   default: false
 # mygame: true
 
-# The amount of rows dedicated to to the items that show up in every GUI
+# The amount of rows dedicated to the items that show up in every GUI
 gui-rows: 5
 
 # Available placeholders:
