@@ -1,0 +1,4 @@
+name: CollectionGame
+version: '${project.version}'
+main: org.tenmillionapples.collectiongame.CollectionGame
+api-version: '1.20'
