@@ -1,4 +1,4 @@
-package org.tenmillionapples.collectiongame;
+package org.tenmillionapples.collectiongame.plugins;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.tenmillionapples.collectiongame.CollectionGame;
 
 public class VaultHook {
     private Economy economy;

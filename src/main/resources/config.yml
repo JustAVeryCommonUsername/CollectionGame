@@ -1,0 +1,60 @@
+# ------------------------------
+# = Unique Item Tracker config =
+# ------------------------------
+
+# Items that won't be required by default, but can be changed for individual games
+# If you add a game name to this, the items under that name will be the new blacklist (overriding the default)
+# Items on this list in newer versions won't cause issues or be counted
+blacklisted-items:
+  default: []
+# mygame: [dragon_breath, dragon_egg, dragon_head, elytra]
+
+# Items that won't be required to collect
+# If you add a game name to this, the items under that name will be the new whitelist (overriding the default)
+# Items on this list in newer versions won't cause issues or be counted
+whitelisted-items:
+  default: []
+# mygame: [diamond, emerald, iron_ingot, gold_ingot, redstone]
+
+# If items are under BOTH blacklist AND whitelist for default or for a specific game name, whitelist will take priority
+
+# The monetary prize for winning a game
+# If you add a game name to this that will be the new prize
+# NOTE: if Vault is not installed, prizes won't work
+prize:
+  default: 100
+# mygame: 15
+
+# If the game continues even after somebody wins
+# This allows multiple people to gain the prize, and the game will never end unless using commands
+# If you add a game name to this, that will be the new rule
+recurrent:
+  default: false
+# mygame: true
+
+# The amount of rows dedicated to to the items that show up in every GUI
+gui-rows: 5
+
+# Available placeholders:
+# {PLAYERNAME} - name of the player
+# {DISPLAYNAME} - display name (nick) of the player
+# {GAME} - the name of the game the player won
+# {ITEM} - the block/item name that was collected
+# {NUMBER} - the number of unique items that were collected up to this point
+# {PRIZE} - the prize for winning
+# Leave this empty ("") for no message to be broadcasted
+collect-message: "&e{PLAYERNAME} &acollected &l{ITEM}! &r&2#{NUMBER}"
+win-message: "&l&a{PLAYERNAME} &r&awon {GAME}!"
+add-player-message: "&aYou are now participating in &e{GAME}&a."
+
+sound:
+  collect:
+  win:
+
+# Settings for the MySQL database
+database:
+  host: localhost # host of your database
+  port: 3306 # Port of your database
+  database: cg
+  user: username
+  password: password12345

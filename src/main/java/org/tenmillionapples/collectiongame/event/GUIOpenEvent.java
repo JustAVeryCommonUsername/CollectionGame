@@ -7,14 +7,14 @@ import org.tenmillionapples.collectiongame.gui.CollectionGUI;
 /**
  * This event is called right before a collection GUI is opened.
  */
-public class CollectionGUIOpenEvent extends GameEvent {
+public class GUIOpenEvent extends GameEvent {
     private static final HandlerList HANDLERS = new HandlerList();
 
     protected final CollectionGUI gui;
 
     protected final GUIType type;
 
-    public CollectionGUIOpenEvent(Game game, CollectionGUI gui, GUIType type) {
+    public GUIOpenEvent(Game game, CollectionGUI gui, GUIType type) {
         this.game = game;
         this.gui = gui;
         this.type = type;
@@ -30,7 +30,7 @@ public class CollectionGUIOpenEvent extends GameEvent {
 
     @Override
     public HandlerList getHandlers() {
-        return null;
+        return HANDLERS;
     }
 
     public static HandlerList getHandlerList() {

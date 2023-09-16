@@ -2,3 +2,66 @@ name: CollectionGame
 version: '${project.version}'
 main: org.tenmillionapples.collectiongame.CollectionGame
 api-version: '1.20'
+softdepend: [Vault, PlaceholderAPI]
+permissions:
+  collectiongame.collectitem:
+    description: Adds an item to a players collection
+  collectiongame.uncollectitem:
+    description: Removes an item from a players collection
+  collectiongame.collected:
+    description: Allows player to view their currently collected item
+    default: true
+  collectiongame.uncollected:
+    description: Allows player to view the items they havent collected
+    default: true
+  collectiongame.creategame:
+    description: Creates a new collection game
+  collectiongame.endgame:
+    description: Ends a collection game
+  collectiongame.addtogame:
+    description: Adds a player to an active collection game
+  collectiongame.removefromgame:
+    description: Removes a player from an active collection game
+  collectiongame.viewcollected:
+    description: Views the collected items of any player for any of their active games
+  collectiongame.viewuncollected:
+    description: Views the uncollected items of any player for any of their active games
+commands:
+  creategame:
+    description: Creates a new collection game
+    permission: collectiongame.creategame
+    aliases: [createcollectiongame]
+  endgame:
+    description: Ends a collection game
+    permission: collectiongame.endgame
+    aliases: [endcollectiongame]
+  addtogame:
+    description: Adds a player to an active collection game
+    permission: collectiongame.addtogame
+    aliases: [addtocollectiongame]
+  removefromgame:
+    description: Removes a player from an active collection game
+    permission: collectiongame.removefromgame
+    aliases: [removefromcollectiongame]
+  collectitem:
+    description: Adds an item to a players collection
+    permission: collectiongame.collectitem
+  uncollectitem:
+    description: Removes an item from a players collection
+    permission: collectiongame.uncollectitem
+  collected:
+    description: Shows the collection of a player in their currently played collection game
+    permission: collectiongame.collected
+    aliases: [col, c]
+  uncollected:
+    description: Shows the items that the player hasn't collected in their currently played game
+    permission: collectiongame.uncollected
+    aliases: [uncol, uc]
+  viewcollected:
+    description: Views the collected items of any player for any of their active games
+    permission: collectiongame.viewcollected
+    aliases: [viewcol, vc]
+  viewuncollected:
+    description: Views the uncollected items of any player for any of their active games
+    permission: collectiongame.viewuncollected
+    aliases: [viewuncol, vuc]
