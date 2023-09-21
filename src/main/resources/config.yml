@@ -48,13 +48,5 @@ win-message: "&l&a{PLAYERNAME} &r&awon {GAME}!"
 add-player-message: "&aYou are now participating in &e{GAME}&a."
 
 sound:
-  collect:
-  win:
-
-# Settings for the MySQL database
-database:
-  host: localhost # host of your database
-  port: 3306 # Port of your database
-  database: cg
-  user: username
-  password: password12345
+  collect: ENTITY_EXPERIENCE_ORB_PICKUP
+  win: ENTITY_PLAYER_LEVELUP

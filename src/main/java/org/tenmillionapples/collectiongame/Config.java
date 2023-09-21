@@ -5,13 +5,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
-import javax.xml.crypto.Data;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -20,9 +18,7 @@ import java.util.Set;
 public final class Config {
     static FileConfiguration config;
 
-    private static Database database = null;
-
-    public Config(){};
+    public Config(){}
 
     public static String getCollectMessage(OfflinePlayer player, ItemStack mat, double prize, int num, Game game) {
         String message = ChatColor.translateAlternateColorCodes('&',
@@ -52,7 +48,7 @@ public final class Config {
         message = message.replace("{DISPLAYNAME}", displayName);
         message = message.replace("{ITEM}", WordUtils.capitalizeFully(Util.getItemName(item).replace('_', ' ')));
         message = message.replace("{GAME}", game.getDisplayName());
-        message = message.replace("{PRIZE}", getPrize(game.getName()) + "");
+        message = message.replace("{PRIZE}", prize + "");
         return message.replace("{NUMBER}", "" + num);
     }
 
@@ -84,21 +80,10 @@ public final class Config {
 
     public static Sound getCollectSound() {
         return Sound.valueOf(config.getString("sound.collect").toUpperCase());
-        // TODO add sound in config
     }
 
     public static Sound getWinSound() {
         return Sound.valueOf(config.getString("sound.win").toUpperCase());
-        // TODO add sound in config
-    }
-
-    public static Database getDatabase() {
-        if (database == null) {
-            ConfigurationSection section = config.getConfigurationSection("database");
-            database = new Database(section.getString("host"), section.getInt("port"), section.getString("database"),
-                    section.getString("user"), section.getString("password"));
-        }
-        return database;
     }
 
     public static int getGuiRows() {
@@ -113,21 +98,5 @@ public final class Config {
                 mats.add(mat);
         });
         return mats;
-    }
-
-    public static final class Database {
-        public final String host;
-        public final int port;
-        public final String databaseName;
-        public final String user;
-        public final String password;
-
-        private Database(String host, int port, String databaseName, String user, String password) {
-            this.host = host;
-            this.port = port;
-            this.databaseName = databaseName;
-            this.user = user;
-            this.password = password;
-        }
     }
 }

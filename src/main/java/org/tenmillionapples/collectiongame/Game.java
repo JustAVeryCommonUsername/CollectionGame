@@ -6,7 +6,6 @@ import org.bukkit.inventory.ItemStack;
 import org.tenmillionapples.collectiongame.event.CollectItemEvent;
 import org.tenmillionapples.collectiongame.event.EndGameEvent;
 import org.tenmillionapples.collectiongame.event.GameWinEvent;
-import org.tenmillionapples.collectiongame.gui.CollectionGUI;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -252,6 +251,7 @@ public class Game {
 
     /**
      * Gets the comparator that sorts that items in the collection GUIs
+     * The comparator is transient and is not persistently saved
      */
     public void setComparator(Comparator<ItemStack> comparator) {
         this.comparator = comparator;
