@@ -84,7 +84,8 @@ public class CollectionGame extends JavaPlugin {
                 SOUL_WALL_TORCH, ATTACHED_MELON_STEM, ATTACHED_PUMPKIN_STEM, PUMPKIN_STEM, MELON_STEM, COCOA, TRIPWIRE, CARROT,
                 POTATOES, SKELETON_WALL_SKULL, WITHER_SKELETON_WALL_SKULL, TORCHFLOWER_CROP, PITCHER_CROP, END_GATEWAY, BEETROOTS,
                 FROSTED_ICE, KELP_PLANT, BAMBOO_SAPLING, BUBBLE_COLUMN, SWEET_BERRY_BUSH, WEEPING_VINES_PLANT, TWISTING_VINES_PLANT,
-                POWDER_SNOW, CAVE_VINES, CAVE_VINES_PLANT, BIG_DRIPLEAF_STEM
+                POWDER_SNOW, CAVE_VINES, CAVE_VINES_PLANT, BIG_DRIPLEAF_STEM, FROGSPAWN, POTION, LINGERING_POTION, SPLASH_POTION,
+                WRITTEN_BOOK, BUNDLE, JIGSAW
         }).collect(Collectors.toSet());
         illegalMats.addAll(mats);
 
@@ -92,11 +93,12 @@ public class CollectionGame extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("Vault") != null) {
             vault = new VaultHook(this);
             if (!vault.setupEconomy()) {
-                getServer().getPluginManager().disablePlugin(this);
+                vault = null;
             }
         }
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            papi = new PAPIHook(this);
+            papi = new PAPIHook();
+            papi.register();
         }
 
         databaseManager = new DatabaseManager(this);
@@ -143,7 +145,7 @@ public class CollectionGame extends JavaPlugin {
      */
     public static void openGUI(Player viewer, OfflinePlayer reference, Game game, @Nonnull GUIOpenEvent.GUIType type) {
         boolean selfCollection = viewer == reference;
-        String title = game.getDisplayName() + ": ";
+        String title = game.getDisplayName() + ChatColor.RESET + ": ";
         List<ItemStack> items;
 
         if (type == GUIOpenEvent.GUIType.COLLECTED) {
@@ -154,7 +156,7 @@ public class CollectionGame extends JavaPlugin {
             title += selfCollection ? "Uncollected" : (reference.getName() + "'s uncollected");
             Set<ItemStack> collected = new HashSet<>(game.getCollections().getOrDefault(reference.getUniqueId(), new HashSet<>()));
             Set<ItemStack> required = new HashSet<>(game.getRequiredItems());
-            required.removeIf(i -> collected.stream().anyMatch(j -> j.isSimilar(i))); // TODO: optimize (maybe keep a cache of the uncollected items?
+            required.removeIf(i -> collected.stream().anyMatch(j -> j.isSimilar(i))); // TODO: optimize (maybe keep a cache of the uncollected items?)
             items = required.stream().sorted(game.getComparator()).collect(Collectors.toList());
         }
 
@@ -166,4 +168,9 @@ public class CollectionGame extends JavaPlugin {
             guis.add(gui);
         }
     }
+
+    /*
+    TODO: reload config command
+    FIXME: clicking on crafting table result without picking up item still collects it
+     */
 }

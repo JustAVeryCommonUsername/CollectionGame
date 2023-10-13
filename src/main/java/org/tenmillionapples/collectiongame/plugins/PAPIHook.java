@@ -1,5 +1,6 @@
 package org.tenmillionapples.collectiongame.plugins;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -14,11 +15,20 @@ import java.util.stream.Collectors;
 import static org.bukkit.ChatColor.RED;
 
 public class PAPIHook extends PlaceholderExpansion{
-    private final CollectionGame game;
+    private final Map<String, ParamType[]> identifiers = new LinkedHashMap<>();
 
-    public PAPIHook(CollectionGame game) {
-        this.game = game;
-        register();
+    public PAPIHook() {
+        identifiers.put("current_game_", new ParamType[]{ParamType.INDEX});
+        identifiers.put("current_game", new ParamType[]{});
+        identifiers.put("display_name_", new ParamType[]{ParamType.GAME});
+        identifiers.put("mode_", new ParamType[]{ParamType.GAME});
+        identifiers.put("required_amount_", new ParamType[]{ParamType.GAME});
+        identifiers.put("collected_amount_", new ParamType[]{ParamType.GAME});
+        identifiers.put("uncollected_amount_", new ParamType[]{ParamType.GAME});
+        identifiers.put("participants_", new ParamType[]{ParamType.GAME});
+        identifiers.put(("prize_"), new ParamType[]{ParamType.GAME});
+        identifiers.put(("largest_collection_player_"), new ParamType[]{ParamType.INDEX, ParamType.GAME});
+        identifiers.put(("largest_collection_amount_"), new ParamType[]{ParamType.INDEX, ParamType.GAME});
     }
 
     @Override
@@ -43,16 +53,7 @@ public class PAPIHook extends PlaceholderExpansion{
 
     @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
-        Map<String, ParamType[]> identifiers = new HashMap<>();
-        identifiers.put("current_game_", new ParamType[]{ParamType.INDEX});
-        identifiers.put("display_name_", new ParamType[]{ParamType.GAME});
-        identifiers.put("mode_", new ParamType[]{ParamType.GAME});
-        identifiers.put("required_amount_", new ParamType[]{ParamType.GAME});
-        identifiers.put("collected_amount_", new ParamType[]{ParamType.GAME});
-        identifiers.put("participants_", new ParamType[]{ParamType.GAME});
-        identifiers.put(("prize_"), new ParamType[]{ParamType.GAME});
-        identifiers.put(("largest_collection_player_"), new ParamType[]{ParamType.INDEX, ParamType.GAME});
-        identifiers.put(("largest_collection_amount_"), new ParamType[]{ParamType.INDEX, ParamType.GAME});
+        params = PlaceholderAPI.setBracketPlaceholders(player, params);
 
         for (Map.Entry<String, ParamType[]> entry : identifiers.entrySet()) {
             String id = entry.getKey();
@@ -64,15 +65,21 @@ public class PAPIHook extends PlaceholderExpansion{
             String newParams = params.substring(id.length());
             int i = 0;
             for(ParamType type : types) {
+                String currentParam;
+                if (types.length > 1)
+                    currentParam = i == 0 ? newParams.substring(0, newParams.indexOf('_'))
+                            : newParams.substring(newParams.indexOf('_') + 1);
+                else
+                    currentParam = newParams;
+
                 if (type == ParamType.INDEX) {
                     try {
-                        objects[i] = Integer.parseInt(newParams.substring(0, newParams.indexOf("_")));
+                        objects[i] = Integer.parseInt(currentParam);
                     } catch (NumberFormatException e) {
                         return "Invalid index";
                     }
                 } else if (type == ParamType.GAME) {
-                    String name = newParams.substring(newParams.indexOf("_"));
-                    Game game = CollectionGame.getGameByName(name);
+                    Game game = CollectionGame.getGameByName(currentParam);
                     if (game == null) {
                         return "Unknown game";
                     }
@@ -87,6 +94,13 @@ public class PAPIHook extends PlaceholderExpansion{
 
     private String placeholderInternal(OfflinePlayer player, @NotNull String id, Object[] params) {
         switch (id) {
+            case "current_game": {
+                Set<Game> games = CollectionGame.getGames(player);
+                if (games.isEmpty()) {
+                    return RED + "Not in a game";
+                }
+                return games.stream().findFirst().get().getName();
+            }
             case "current_game_": {
                 Set<Game> games = CollectionGame.getGames(player);
                 if (games.isEmpty()) {
@@ -109,7 +123,12 @@ public class PAPIHook extends PlaceholderExpansion{
                 return Integer.toString(((Game) params[0]).getRequiredItems().size());
             }
             case "collected_amount_": {
-                return Integer.toString(((Game) params[0]).getCollections().get(player.getUniqueId()).size());
+                return Integer.toString(((Game) params[0]).getCollections().getOrDefault(player.getUniqueId(), new HashSet<>()).size());
+            }
+            case "uncollected_amount_": {
+                Game game = (Game) params[0];
+                int requiredSize = game.getRequiredItems().size();
+                return Integer.toString(requiredSize - game.getCollections().getOrDefault(player.getUniqueId(), new HashSet<>()).size());
             }
             case "participants_": {
                 return Integer.toString(((Game) params[0]).getParticipants().size());

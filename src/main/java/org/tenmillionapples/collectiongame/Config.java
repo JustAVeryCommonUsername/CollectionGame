@@ -57,8 +57,7 @@ public final class Config {
      * @return The whitelist material set
      */
     public static Set<Material> getWhitelist(@Nullable String game) {
-        List<String> list = config.getStringList("whitelisted-items." + (game == null ? "default" : game));
-        return getMatsFromNameList(list);
+        return getMatsFromNameList(getStringListOrDefault("whitelisted-items", game));
     }
 
     /**
@@ -66,16 +65,30 @@ public final class Config {
      * @return The blacklist material set
      */
     public static Set<Material> getBlacklist(@Nullable String game) {
-        List<String> list = config.getStringList("blacklisted-items." + (game == null ? "default" : game));
-        return getMatsFromNameList(list);
+        return getMatsFromNameList(getStringListOrDefault("blacklisted-items", game));
     }
 
-    public static double getPrize(@Nullable String game) {
-        return config.getDouble("prize." + (game == null ? "default" : game));
+    public static double getPrize(String game) {
+        String path = "prize";
+        if (!config.isSet(String.format("%s.%s", path, game)))
+            return config.getDouble(String.format("%s.default", path));
+        else
+            return config.getDouble(String.format("%s.%s", path, game));
     }
 
-    public static boolean isRecurrent(@Nullable String game) {
-        return config.getBoolean("recurrent." + (game == null ? "default" : game));
+    public static boolean isRecurrent(String game) {
+        String path = "recurrent";
+        if (!config.isSet(String.format("%s.%s", path, game)))
+            return config.getBoolean(String.format("%s.default", path));
+        else
+            return config.getBoolean(String.format("%s.%s", path, game));
+    }
+
+    private static List<String> getStringListOrDefault(String path, String game) {
+        if (!config.isSet(String.format("%s.%s", path, game)))
+            return config.getStringList(String.format("%s.default", path));
+        else
+            return config.getStringList(String.format("%s.%s", path, game));
     }
 
     public static Sound getCollectSound() {

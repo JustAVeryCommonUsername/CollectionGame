@@ -1,21 +1,15 @@
 package org.tenmillionapples.collectiongame.command.executors;
 
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.*;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.tenmillionapples.collectiongame.CollectionGame;
 import org.tenmillionapples.collectiongame.Game;
 import org.tenmillionapples.collectiongame.Util;
 import org.tenmillionapples.collectiongame.command.GameCommand;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.bukkit.ChatColor.GREEN;
 import static org.bukkit.ChatColor.RED;
@@ -35,7 +29,7 @@ public class CollectItem extends GameCommand {
 
         ItemStack item = new ItemStack(mat);
 
-        if (!game.requiredContainsItem(item)) {
+        if (!game.getRequiredEquivalent(item).isPresent()) {
             sender.sendMessage(String.format(RED + "%s isn't required in game %s.",
                     WordUtils.capitalize(mat.name().toLowerCase()), game.getName()));
             return;

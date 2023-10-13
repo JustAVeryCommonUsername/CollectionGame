@@ -14,6 +14,7 @@ import org.tenmillionapples.collectiongame.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.bukkit.ChatColor.RED;
@@ -47,6 +48,15 @@ public abstract class GameCommand implements TabExecutor {
 
         // Test if all arguments are there
         boolean oneGame = ArrayUtils.contains(argumentTypes, ArgumentType.GAME) && CollectionGame.games.size() == 1;
+        Set<Game> referenceGames = CollectionGame.games;
+        if (referenceType == ReferenceType.COMMAND_SENDER && mustBePlayer) {
+            Set<Game> personalGames = CollectionGame.getGames((OfflinePlayer) sender);
+            if (personalGames.size() == 1) {
+                oneGame = true;
+                referenceGames = personalGames;
+            }
+        }
+
         if (args.length < argumentTypes.length - (oneGame ? 1 : 0)) {
             sender.sendMessage(String.format(RED + "Usage: %s.", getUsage(label)));
             return true;
@@ -57,7 +67,7 @@ public abstract class GameCommand implements TabExecutor {
         for(ArgumentType type : argumentTypes) {
             String arg;
             if (oneGame && type == ArgumentType.GAME) {
-                arg = CollectionGame.games.stream().findAny().get().getName();
+                arg = referenceGames.stream().findAny().get().getName();
             } else {
                 arg = args[i];
             }
@@ -65,7 +75,7 @@ public abstract class GameCommand implements TabExecutor {
             switch (type) {
                 case PLAYER: {
                     OfflinePlayer player = Bukkit.getOfflinePlayer(arg);
-                    if (!player.hasPlayedBefore()) {
+                    if (!player.hasPlayedBefore() && !player.isOnline()) {
                         sender.sendMessage(String.format(RED + "Unknown player: %s.", arg));
                         return true;
                     }
@@ -139,7 +149,7 @@ public abstract class GameCommand implements TabExecutor {
                     int playerIndex = ArrayUtils.indexOf(argumentTypes, ArgumentType.PLAYER);
 
                     player = Bukkit.getOfflinePlayer(args[playerIndex]);
-                    if (!player.hasPlayedBefore())
+                    if (!player.hasPlayedBefore() && !player.isOnline())
                         break;
                 } else if (referenceType == ReferenceType.COMMAND_SENDER) {
                     if (sender instanceof Player) {

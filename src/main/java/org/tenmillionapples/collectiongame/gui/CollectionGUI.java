@@ -7,18 +7,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.tenmillionapples.collectiongame.Config;
-import org.tenmillionapples.collectiongame.Game;
 import org.tenmillionapples.collectiongame.Util;
-import org.tenmillionapples.collectiongame.event.GUIOpenEvent;
 
 import java.util.List;
-
-import static org.bukkit.ChatColor.*;
 
 public class CollectionGUI {
     private final Player viewer;
     private final List<ItemStack> items;
-    private String title;
+    private final String title;
     private int page = 0;
 
     private static final Material PAGE_SELECTION_MAT = Material.ARROW;
@@ -84,7 +80,7 @@ public class CollectionGUI {
     }
 
     public int getMaxPage() {
-        return items.size() / getSlotCount();
+        return (items.size() - 1) / getSlotCount();
     }
 
     private int getSlotCount() {

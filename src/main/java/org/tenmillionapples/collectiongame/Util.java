@@ -1,19 +1,14 @@
 package org.tenmillionapples.collectiongame;
 
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static org.bukkit.ChatColor.RED;
 
 public final class Util {
     private Util(){}
@@ -69,5 +64,18 @@ public final class Util {
             allValidItems.removeAll(CollectionGame.illegalMats);
         }
         return new HashSet<>(allValidItems);
+    }
+
+    /**
+     * Returns whether the item has any custom data (custom name, lore enchants, etc.) or if it's just a material
+     * @param item The item to test
+     */
+    public static boolean hasCustomData(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null)
+            return false;
+
+        return meta.hasDisplayName() || meta.hasLore() || meta.hasAttributeModifiers() || meta.hasCustomModelData()
+                || meta.hasEnchants();
     }
 }

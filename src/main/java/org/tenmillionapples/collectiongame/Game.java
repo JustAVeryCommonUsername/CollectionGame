@@ -50,16 +50,20 @@ public class Game {
         item = item.clone();
         item.setAmount(1);
 
-        if (collectionContainsItem(player, item) || !requiredContainsItem(item))
+        Optional<ItemStack> optional = getRequiredEquivalent(item);
+        if (collectionContainsItem(player, item) || !optional.isPresent())
             return false;
 
-        CollectItemEvent event = new CollectItemEvent(player, item, this);
+        CollectItemEvent event = new CollectItemEvent(player, optional.get(), this);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled())
             return false;
 
         item = event.getItem();
+        if (!collections.containsKey(uuid))
+            collections.put(uuid, new HashSet<>());
         collections.get(uuid).add(item);
+
         if (player.isOnline()) {
             Player online = player.getPlayer();
             online.playSound(online.getLocation(), Config.getCollectSound(), 1f, 1f);
@@ -101,7 +105,7 @@ public class Game {
     public void updateGame() {
         Set<OfflinePlayer> winners = new HashSet<>();
         getParticipants().forEach(p -> {
-            if (collections.get(p.getUniqueId()).size() >= required.size()) {
+            if (collections.get(p.getUniqueId()).size() >= getRequiredItems().size()) {
                 winners.add(p);
             }
             // This way calculates the winners exactly, but is much slower
@@ -202,7 +206,7 @@ public class Game {
     public OfflinePlayer getPlayerForPlace(int place) {
         List<Map.Entry<UUID, Set<ItemStack>>> places = collections.entrySet().stream()
                 .sorted(Comparator.comparingInt(entry -> entry.getValue().size())).collect(Collectors.toList());
-        return Bukkit.getOfflinePlayer(places.get(place - 1).getKey());
+        return places.isEmpty() ? null : Bukkit.getOfflinePlayer(places.get(place - 1).getKey());
     }
 
     /**
@@ -212,18 +216,19 @@ public class Game {
      * @return true if the collection contains the item, false otherwise
      */
     public boolean collectionContainsItem(OfflinePlayer player, ItemStack item) {
-        Optional<ItemStack> out = collections.get(player.getUniqueId()).stream().filter(i -> i.isSimilar(item)).findAny();
+        Optional<ItemStack> out = collections.getOrDefault(player.getUniqueId(), new HashSet<>()).stream()
+                .filter(i -> Util.hasCustomData(i) ? i.isSimilar(item) : i.getType() == item.getType()).findAny();
         return out.isPresent();
     }
 
     /**
-     * Gets whether the required item set contains a similar item
-     * @param item The item
-     * @return true if the collection contains the item, false otherwise
+     * Gets the equivalent item that was found in the required set, or nothing or no item was matched.
+     * @param item The item to match
+     * @return The item that was found in the required set, if present
      */
-    public boolean requiredContainsItem(ItemStack item) {
-        Optional<ItemStack> out = required.stream().filter(i -> i.isSimilar(item)).findAny();
-        return out.isPresent();
+    public Optional<ItemStack> getRequiredEquivalent(ItemStack item) {
+        return getRequiredItems().stream()
+                .filter(i -> Util.hasCustomData(i) ? i.isSimilar(item) : i.getType() == item.getType()).findFirst();
     }
 
     public Mode getMode() {
