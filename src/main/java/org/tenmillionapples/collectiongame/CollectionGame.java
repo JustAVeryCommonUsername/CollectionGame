@@ -72,7 +72,7 @@ public class CollectionGame extends JavaPlugin {
             if (mat.isLegacy() || mat.isAir() || name.startsWith("INFESTED_") || name.endsWith("_SPAWN_EGG")
             || name.endsWith("_WALL_SIGN") || name.endsWith("_WALL_HANGING_SIGN") || name.endsWith("_CAULDRON")
             || name.startsWith("POTTED_") || name.endsWith("_WALL_HEAD") || name.endsWith("_WALL_BANNER")
-            || name.endsWith("CANDLE_CAKE")) {
+            || name.endsWith("CANDLE_CAKE") || name.endsWith("_WALL_FAN")) {
                 illegalMats.add(mat);
             }
         }
@@ -81,11 +81,11 @@ public class CollectionGame extends JavaPlugin {
                 END_PORTAL_FRAME, END_PORTAL, BARRIER, LIGHT, DIRT_PATH, COMMAND_BLOCK, REPEATING_COMMAND_BLOCK, CHAIN_COMMAND_BLOCK,
                 COMMAND_BLOCK_MINECART, STRUCTURE_VOID, STRUCTURE_BLOCK, FILLED_MAP, PLAYER_HEAD, KNOWLEDGE_BOOK, DEBUG_STICK, WATER,
                 LAVA, TALL_SEAGRASS, PISTON_HEAD, MOVING_PISTON, WALL_TORCH, FIRE, SOUL_FIRE, REDSTONE_WIRE, REDSTONE_WALL_TORCH,
-                SOUL_WALL_TORCH, ATTACHED_MELON_STEM, ATTACHED_PUMPKIN_STEM, PUMPKIN_STEM, MELON_STEM, COCOA, TRIPWIRE, CARROT,
+                SOUL_WALL_TORCH, ATTACHED_MELON_STEM, ATTACHED_PUMPKIN_STEM, PUMPKIN_STEM, MELON_STEM, COCOA, TRIPWIRE, CARROTS,
                 POTATOES, SKELETON_WALL_SKULL, WITHER_SKELETON_WALL_SKULL, TORCHFLOWER_CROP, PITCHER_CROP, END_GATEWAY, BEETROOTS,
                 FROSTED_ICE, KELP_PLANT, BAMBOO_SAPLING, BUBBLE_COLUMN, SWEET_BERRY_BUSH, WEEPING_VINES_PLANT, TWISTING_VINES_PLANT,
                 POWDER_SNOW, CAVE_VINES, CAVE_VINES_PLANT, BIG_DRIPLEAF_STEM, FROGSPAWN, POTION, LINGERING_POTION, SPLASH_POTION,
-                WRITTEN_BOOK, BUNDLE, JIGSAW
+                WRITTEN_BOOK, BUNDLE, JIGSAW, NETHER_PORTAL, BEDROCK
         }).collect(Collectors.toSet());
         illegalMats.addAll(mats);
 

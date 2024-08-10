@@ -76,14 +76,6 @@ public final class Config {
             return config.getDouble(String.format("%s.%s", path, game));
     }
 
-    public static boolean isRecurrent(String game) {
-        String path = "recurrent";
-        if (!config.isSet(String.format("%s.%s", path, game)))
-            return config.getBoolean(String.format("%s.default", path));
-        else
-            return config.getBoolean(String.format("%s.%s", path, game));
-    }
-
     private static List<String> getStringListOrDefault(String path, String game) {
         if (!config.isSet(String.format("%s.%s", path, game)))
             return config.getStringList(String.format("%s.default", path));

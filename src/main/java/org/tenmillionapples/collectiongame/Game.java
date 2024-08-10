@@ -206,7 +206,7 @@ public class Game {
     public OfflinePlayer getPlayerForPlace(int place) {
         List<Map.Entry<UUID, Set<ItemStack>>> places = collections.entrySet().stream()
                 .sorted(Comparator.comparingInt(entry -> entry.getValue().size())).collect(Collectors.toList());
-        return places.isEmpty() ? null : Bukkit.getOfflinePlayer(places.get(place - 1).getKey());
+        return places.size() < place ? null : Bukkit.getOfflinePlayer(places.get(places.size() - place).getKey());
     }
 
     /**

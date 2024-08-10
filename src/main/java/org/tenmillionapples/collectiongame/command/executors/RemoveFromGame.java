@@ -21,7 +21,7 @@ public class RemoveFromGame extends GameCommand {
 
     @Override
     protected void onCommandInternal(CommandSender sender, List<Object> objects) {
-        OfflinePlayer player = (Player) objects.get(0);
+        OfflinePlayer player = (OfflinePlayer) objects.get(0);
         Game game = (Game) objects.get(1);
 
         if (game.removeFromGame(player)) {

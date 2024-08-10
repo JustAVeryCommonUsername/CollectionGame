@@ -2,14 +2,14 @@
 # = Collection Game Config =
 # ------------------------------
 
-# Items that won't be required by default, but can be changed for individual games
+# Items that won't be required to collect
 # If you add a game name to this, the items under that name will be the new blacklist (overriding the default)
 # Items on this list in newer versions won't cause issues or be counted
 blacklisted-items:
   default: []
 # mygame: [dragon_breath, dragon_egg, dragon_head, elytra]
 
-# Items that won't be required to collect
+# The only items that will be required to collect
 # If you add a game name to this, the items under that name will be the new whitelist (overriding the default)
 # Items on this list in newer versions won't cause issues or be counted
 whitelisted-items:
@@ -42,7 +42,7 @@ gui-rows: 5
 # {ITEM} - the block/item name that was collected
 # {NUMBER} - the number of unique items that were collected up to this point
 # {PRIZE} - the prize for winning
-# Leave this empty ("") for no message to be broadcasted
+# Leave one empty ("") for no message to be broadcasted or sent
 collect-message: "&e{PLAYERNAME} &acollected &l{ITEM}! &r&2#{NUMBER}"
 win-message: "&l&a{PLAYERNAME} &r&awon {GAME}!"
 add-player-message: "&aYou are now participating in &e{GAME}&a."
